@@ -1,45 +1,29 @@
 <div align="center">
 
-<img 
- alt="FinSight-AI Hero Banner" 
- src="./assets/finsight_banner.png" 
- width="100%" 
- style="border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" 
-/>
-
-  <h1>🌍 FinSight AI - Intelligent Personal Finance Tracker</h1>
-
+<h1>🌍 FinSight AI - Intelligent Personal Finance Tracker</h1>
   <p><em>“Not just tracking money — understanding it.”</em></p>
-
+  <p><strong>Experience the next generation of financial tracking with predictive ML insights, dynamic goal allocation, and real-time visualization.</strong></p>
+  
   <p>
-    <strong>
-      Experience the next generation of financial tracking with predictive ML insights,
-      dynamic goal allocation, and real-time visualization.
-    </strong>
+    <a href="#features"><strong>Features</strong></a> ·
+    <a href="#architecture"><strong>Architecture</strong></a> ·
+    <a href="#quick-start-docker"><strong>Quick Start</strong></a> ·
+    <a href="#manual-setup"><strong>Manual Setup</strong></a>
   </p>
-
-  <p>
-    <a href="#-key-features"><strong>Features</strong></a> ·
-    <a href="#-technical-architecture"><strong>Architecture</strong></a> ·
-    <a href="#-getting-started-docker-compose"><strong>Quick Start</strong></a>
-  </p>
+=======
+  <img alt="FinSight-AI Hero Banner" src="./assets/finsight_banner.png" width="100%" style="border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"/>
+  <h1>✨ FinSight-AI ✨</h1>
+  <p>A next-generation, AI-powered Personal Finance Intelligence System designed to empower users with predictive analytics, transaction management, and intelligent goal tracking.</p>
+>>>>>>> 6486ea85262fbe4713f6dafacac1a499616a758d
 
   <!-- Badges -->
-
   <p>
-    <img src="https://img.shields.io/badge/React-Frontend-blue?style=for-the-badge&logo=react" alt="React" />
-    <img src="https://img.shields.io/badge/Node.js-Backend-green?style=for-the-badge&logo=node.js" alt="Node JS" />
-    <img src="https://img.shields.io/badge/Python-ML_Service-yellow?style=for-the-badge&logo=python" alt="Python" />
-    <img src="https://img.shields.io/badge/Microservices-Architecture-orange?style=for-the-badge&logo=docker" alt="Microservices" />
-    <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker" alt="Docker" />
+    <img src="https://img.shields.io/badge/React-Frontend-blue?style=for-the-badge&logo=react" alt="React">
+    <img src="https://img.shields.io/badge/Node.js-Backend-green?style=for-the-badge&logo=node.js" alt="Node JS">
+    <img src="https://img.shields.io/badge/Python-ML_Service-yellow?style=for-the-badge&logo=python" alt="Python">
+    <img src="https://img.shields.io/badge/Microservices-Architecture-orange?style=for-the-badge&logo=docker" alt="Microservices">
+    <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker" alt="Docker">
   </p>
-
-<img 
- src="./Frontend/src/assets/hero.png" 
- alt="FinSight AI Dashboard Preview" 
- width="100%" 
- style="border-radius: 10px; margin-top: 20px;" 
-/>
 
 </div>
 
