@@ -1,5 +1,5 @@
 <div align="center">
-<<<<<<< HEAD
+
   <h1>🌍 FinSight AI - Intelligent Personal Finance Tracker</h1>
   <p><em>“Not just tracking money — understanding it.”</em></p>
   <p><strong>Experience the next generation of financial tracking with predictive ML insights, dynamic goal allocation, and real-time visualization.</strong></p>
