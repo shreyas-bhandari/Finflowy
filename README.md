@@ -1,4 +1,5 @@
 <div align="center">
+<<<<<<< HEAD
   <h1>🌍 FinSight AI - Intelligent Personal Finance Tracker</h1>
   <p><em>“Not just tracking money — understanding it.”</em></p>
   <p><strong>Experience the next generation of financial tracking with predictive ML insights, dynamic goal allocation, and real-time visualization.</strong></p>
@@ -9,13 +10,19 @@
     <a href="#quick-start-docker"><strong>Quick Start</strong></a> ·
     <a href="#manual-setup"><strong>Manual Setup</strong></a>
   </p>
+=======
+  <img alt="FinSight-AI Hero Banner" src="./assets/finsight_banner.png" width="100%" style="border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"/>
+  <h1>✨ FinSight-AI ✨</h1>
+  <p>A next-generation, AI-powered Personal Finance Intelligence System designed to empower users with predictive analytics, transaction management, and intelligent goal tracking.</p>
+>>>>>>> 6486ea85262fbe4713f6dafacac1a499616a758d
 
+  <!-- Badges -->
   <p>
-    <img src="https://img.shields.io/badge/Node.js-Backend-green.svg?style=for-the-badge&logo=nodedotjs" alt="Node.js" />
-    <img src="https://img.shields.io/badge/React-Frontend-blue.svg?style=for-the-badge&logo=react" alt="React" />
-    <img src="https://img.shields.io/badge/Python-ML%20Service-yellow.svg?style=for-the-badge&logo=python" alt="Python" />
-    <img src="https://img.shields.io/badge/Docker-Containerized-2496ED.svg?style=for-the-badge&logo=docker" alt="Docker" />
-    <img src="https://img.shields.io/badge/MongoDB-Database-47A248.svg?style=for-the-badge&logo=mongodb" alt="MongoDB" />
+    <img src="https://img.shields.io/badge/React-Frontend-blue?style=for-the-badge&logo=react" alt="React">
+    <img src="https://img.shields.io/badge/Node.js-Backend-green?style=for-the-badge&logo=node.js" alt="Node JS">
+    <img src="https://img.shields.io/badge/Python-ML_Service-yellow?style=for-the-badge&logo=python" alt="Python">
+    <img src="https://img.shields.io/badge/Microservices-Architecture-orange?style=for-the-badge&logo=docker" alt="Microservices">
+    <img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker" alt="Docker">
   </p>
 
   <img src="./Frontend/src/assets/hero.png" alt="FinSight AI Dashboard Preview" width="100%" style="border-radius: 10px; margin-top: 20px;" />
@@ -23,17 +30,41 @@
 
 ---
 
-## ✨ Features
-FinSight AI isn't just a budget planner—it is an intelligent system adapting to your financial behavior.
-- 🧠 **Predictive Financial Insights**: Python-powered ML service analyzing transaction history for future trend forecasting.
-- 🎯 **Priority-Based Dynamic Goal Tracking**: Algorithmic income distribution based on goal priority and urgency.
-- 💳 **Complete Transaction Management**: Log, categorize, and update income and expenses instantly.
-- 📊 **Real-time Analytics Dashboard**: Interactive charts (`recharts`), automated summaries, and elegant UI.
-- 🔒 **Secure Authentication**: JWT-based secure user sessions and password hashing for ultimate privacy.
-- 🐳 **1-Click Containerized Setup**: A robust Production-grade Docker setup out of the box!
+## 🌟 Overview
+
+Welcome to **FinSight-AI**, a premier financial intelligence suite. This project is built on a scalable microservice architecture bringing together a lightning-fast React frontend, a robust Node.js backend, and a dedicated Python Machine Learning service. It is designed to track income, categorize expenses seamlessly, and deliver proactive financial insights based on user behavior patterns.
+
+## 🚀 Key Features
+
+* **AI Predictive Analytics:** A dedicated Python microservice driving behavioral analysis and spending forecasts.
+* **Comprehensive Dashboard:** An interactive, dark-mode glassmorphism UI built for deep financial visualization.
+* **Intelligent Goal Tracking:** Priority-based savings allocation and dynamic goal adjustment models.
+* **Transaction Management:** Seamless logging, deep categorization, and secure RESTful transaction handlers.
+* **Fully Containerized Environment:** Effortless deployment using Docker and orchestrating multiple distinct services.
 
 ---
 
+## 🛠️ Technology Stack
+
+An enterprise-grade selection of technologies architected for performance and data science capabilities:
+
+### Frontend Ecosystem (`Frontend/`)
+* **Framework:** React in TypeScript
+* **State & Routing:** Context APIs & React Router
+* **Styling:** Tailwind CSS with deep glassmorphism UI aesthetics
+
+### Core API Server (`Backend/`)
+* **Runtime:** Node.js + Express
+* **Database Management:** Deeply structured MongoDB interactions
+* **Security:** Secured JWT Authentication mechanisms
+
+### Machine Learning Hub (`ML_Service/`)
+* **Environment:** Python
+* **Capabilities:** Predictive analytics and predictive modeling pipelines
+
+---
+
+<<<<<<< HEAD
 ## 🏗️ Technical Architecture
 
 FinSight AI is designed using a modern, containerized microservices architecture to ensure scalability, separation of concerns, and robust performance. 
@@ -112,78 +143,52 @@ FinSight-AI/
 ├── 🐳 docker-compose.yml     # Multi-container orchestration
 └── 📄 README.md              # Project documentation
 ```
+=======
+## 🏗️ System Architecture
+>>>>>>> 6486ea85262fbe4713f6dafacac1a499616a758d
 
----
-
-## 🚀 Quick Start (Docker)
-The easiest way to get FinSight AI running locally in less than 2 minutes!
-
-**Prerequisites:** You must have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed on your machine.
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/shreyas-bhandari/FinSight-AI.git
-   cd FinSight-AI
-   ```
-2. **Launch with Docker Compose**
-   ```bash
-   docker-compose up --build
-   ```
-   *That's it!* Docker will build the Frontend UI, start the Node Backend, provision the ML Microservice, and spin up a MongoDB instance automatically on an isolated internal bridge network.
-   
-3. **Access the App**
-   - Head over to `http://localhost:80` in your web browser. 
-   - Backend API runs at `http://localhost:5000`
-   - ML Microservice API runs at `http://localhost:5001`
-
----
-
-## 🛠️ Manual Setup (Development Mode)
-If you wish to run the individual services locally for development:
-
-**Prerequisite:** Make sure you have **Node.js**, **Python 3.x**, and a local running instance of **MongoDB** (or a MongoDB Atlas URI string).
-
-### 1. Database Setup
-Ensure MongoDB is running locally on `mongodb://localhost:27017` or provide your own `.env` configuration in the Backend directory.
-
-### 2. Backend (Node.js API)
-```bash
-cd Backend
-npm install
-# Set your environment variables (PORT, MONGO_URI, JWT_SECRET, ML_API_URL)
-npm run dev
+```mermaid
+graph TD;
+    Client[💻 React Frontend Dashboard] -->|REST API Calls| Gateway[⚙️ Node.js API Backend];
+    Gateway -->|Data Persistence| DB[(🗄️ Database)];
+    Gateway -->|Predictive Data Requests| ML[🧠 Python ML Service];
+    ML -->|Informed Actionable Insights| Gateway;
 ```
 
-### 3. ML Service (Python)
-```bash
-cd ML_Service
-pip install -r requirements.txt
-python app.py
-```
+---
 
-### 4. Frontend (React / Vite)
-```bash
-cd Frontend
-npm install
-npm run dev
+## 📂 System Topology
+
+```text
+📦 FinSight-AI
+ ┣ 📂 Frontend            # Client Application (React/TS)
+ ┃ ┣ 📂 src/pages         # Dashboard, Goals, Insights, Transactions
+ ┃ ┗ 📂 src/components    # Reusable UI Blocks
+ ┣ 📂 Backend             # Core Data Flow and Authentication API
+ ┣ 📂 ML_Service          # Python-based Predictive Analytics Engine
+ ┗ 📜 docker-compose.yml  # Orchestrates full stack deployment
 ```
-Navigate to `http://localhost:5173` to view the frontend natively.
 
 ---
 
-## 📜 Environment variables reference
-For the backend API to function correctly, make sure these env variables are accessible:
-- `PORT=5000`
-- `MONGO_URI=mongodb://localhost:27017/finance_tracker` (Change if not running via Docker)
-- `ML_API_URL=http://localhost:5001/api/ml`
-- `JWT_SECRET=super_secret_jwt_signature_key`
+## 🚦 Getting Started (Docker Compose)
+
+Spinning up this microservices suite is completely automated via Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/shreyas-bhandari/FinSight-AI.git
+
+# Navigate into the project directory
+cd FinSight-AI
+
+# Boot up the Frontend, Backend, ML Service, and Database containers
+docker-compose up -d --build
+```
+> **Note:** The frontend application will map to your host environment effortlessly. Stop the suite via `docker-compose down`.
 
 ---
-
-## 🤝 Contribution
-Contributions, issues, and feature requests are welcome! 
-Feel free to check [issues page](https://github.com/shreyas-bhandari/FinSight-AI/issues).
 
 <div align="center">
-  <sub>Built with ❤️ by tech enthusiasts for financial freedom.</sub>
+  <b>Architected for the future of decentralized algorithmic finance.</b>
 </div>
