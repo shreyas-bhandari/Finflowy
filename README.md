@@ -14,7 +14,7 @@
   <img alt="FinSight-AI Hero Banner" src="./assets/finsight_banner.png" width="100%" style="border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"/>
   <h1>✨ FinSight-AI ✨</h1>
   <p>A next-generation, AI-powered Personal Finance Intelligence System designed to empower users with predictive analytics, transaction management, and intelligent goal tracking.</p>
->>>>>>> 6486ea85262fbe4713f6dafacac1a499616a758d
+
 
   <!-- Badges -->
   <p>
