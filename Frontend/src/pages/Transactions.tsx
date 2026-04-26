@@ -109,7 +109,7 @@ export default function Transactions() {
                   </td>
                   <td className="px-6 py-4 text-muted-foreground">{tx.date}</td>
                   <td className={`px-6 py-4 text-right font-bold ${tx.type === 'income' ? 'text-success' : 'text-foreground'}`}>
-                    {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString()}
+                    {tx.type === 'income' ? '+' : '-'}  ₹ {tx.amount.toLocaleString()}
                   </td>
                   <td className="px-6 py-4 text-center">
                     <button 
@@ -168,7 +168,7 @@ export default function Transactions() {
                      </select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Amount ($)</Label>
+                    <Label>Amount (₹)</Label>
                     <Input 
                       type="number" 
                       step="0.01"

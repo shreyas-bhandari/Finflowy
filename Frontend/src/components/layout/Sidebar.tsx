@@ -29,7 +29,7 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     >
       <div className="flex h-16 items-center justify-between px-4 border-b border-white/10">
         <div className={cn("font-bold text-xl bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent truncate", !isOpen && "md:hidden")}>
-          FinIntel
+          FinFlowy
         </div>
         <button onClick={toggleSidebar} className="p-2 rounded-lg hover:bg-white/10 hidden md:block">
           {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}

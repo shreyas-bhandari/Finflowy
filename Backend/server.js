@@ -22,7 +22,7 @@ app.get('/health', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongodb:27017/finance_tracker';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongodb:27017/finflowy';
 
 mongoose.connect(MONGO_URI)
   .then(() => {

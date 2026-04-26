@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 import pandas as pd
 import numpy as np
 
-app = FastAPI(title="Finance Tracker AI Microservice", version="1.0.0")
+app = FastAPI(title="FinFlowy AI Microservice", version="1.0.0")
 
 # --- Pydantic Models ---
 

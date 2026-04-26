@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>🌍 FinSight AI - Intelligent Personal Finance Tracker</h1>
+<h1>🌍 FinFlowy - Intelligent Personal FinFlowy</h1>
   <p><em>“Not just tracking money — understanding it.”</em></p>
   <p><strong>Experience the next generation of financial tracking with predictive ML insights, dynamic goal allocation, and real-time visualization.</strong></p>
   
@@ -11,8 +11,8 @@
     <a href="#manual-setup"><strong>Manual Setup</strong></a>
   </p>
 =======
-  <img alt="FinSight-AI Hero Banner" src="./assets/finsight_banner.png" width="100%" style="border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"/>
-  <h1>✨ FinSight-AI ✨</h1>
+  <img alt="FinFlowy Hero Banner" src="./assets/FinFlowy_banner.png" width="100%" style="border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"/>
+  <h1>✨ FinFlowy ✨</h1>
   <p>A next-generation, AI-powered Personal Finance Intelligence System designed to empower users with predictive analytics, transaction management, and intelligent goal tracking.</p>
 
 
@@ -31,7 +31,7 @@
 
 ## 🌟 Overview
 
-Welcome to **FinSight-AI**, a premier financial intelligence suite.
+Welcome to **FinFlowy**, a premier financial intelligence suite.
 This project is built on a scalable microservice architecture bringing together a lightning-fast React frontend, a robust Node.js backend, and a dedicated Python Machine Learning service.
 
 It is designed to:
@@ -75,7 +75,7 @@ It is designed to:
 
 ## 🏗️ Technical Architecture
 
-FinSight AI follows a **containerized microservices architecture** ensuring scalability and separation of concerns.
+FinFlowy follows a **containerized microservices architecture** ensuring scalability and separation of concerns.
 
 ### ⚙️ High-Level Diagram
 
@@ -142,7 +142,7 @@ graph TD
 ### 📂 Directory Structure
 
 ```text
-FinSight-AI/
+FinFlowy/
 ├── Backend/
 │   ├── models/
 │   ├── routes/
@@ -176,7 +176,7 @@ graph TD;
 ## 📂 System Topology
 
 ```text
-📦 FinSight-AI
+📦 FinFlowy
  ┣ 📂 Frontend
  ┃ ┣ 📂 src/pages
  ┃ ┗ 📂 src/components
@@ -190,8 +190,8 @@ graph TD;
 ## 🚦 Getting Started (Docker Compose)
 
 ```bash
-git clone https://github.com/shreyas-bhandari/FinSight-AI.git
-cd FinSight-AI
+git clone https://github.com/shreyas-bhandari/FinFlowy.git
+cd FinFlowy
 docker-compose up -d --build
 ```
 

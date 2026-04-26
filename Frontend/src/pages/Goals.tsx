@@ -152,7 +152,7 @@ export default function Goals() {
           <div className="col-span-full py-12 text-center rounded-2xl border border-dashed border-white/20">
             <Target className="mx-auto mb-4 text-muted-foreground opacity-50" size={48} />
             <h3 className="text-lg font-medium text-foreground">No goals active</h3>
-            <p className="text-muted-foreground mb-6">Create a goal to let FinIntel track and predict your success.</p>
+            <p className="text-muted-foreground mb-6">Create a goal to let FinFlowy track and predict your success.</p>
             <Button onClick={() => setIsModalOpen(true)}>Create your first Goal</Button>
           </div>
         )}

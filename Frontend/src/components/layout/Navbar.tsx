@@ -14,7 +14,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
         <button onClick={toggleSidebar} className="md:hidden p-2 rounded-lg hover:bg-white/10 text-muted-foreground">
           <Menu size={24} />
         </button>
-        <span className="font-semibold text-lg md:hidden">FinIntel</span>
+        <span className="font-semibold text-lg md:hidden">FinFlowy</span>
       </div>
 
       <div className="flex items-center space-x-6">
