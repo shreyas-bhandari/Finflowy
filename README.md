@@ -52,123 +52,169 @@ It is designed to:
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Technology Stack & Libraries
 
-### Frontend Ecosystem (`Frontend/`)
+### 💻 Frontend Ecosystem
+* **Framework:** React 18 with TypeScript
+* **State Management:** Zustand / React Context API
+* **Routing:** React Router DOM
+* **Styling & UI:** Tailwind CSS, Framer Motion (Animations), Lucide React (Icons)
+* **Build Tool:** Vite
 
-* React (TypeScript)
-* Context API + React Router
-* Tailwind CSS
+### ⚙️ Backend Architecture
+* **Runtime:** Node.js
+* **Framework:** Express.js
+* **Database:** MongoDB with Mongoose ODM
+* **Security:** JWT Authentication, Bcrypt (Password Hashing), CORS, Helmet
 
-### Backend (`Backend/`)
-
-* Node.js + Express
-* MongoDB (Mongoose)
-* JWT Authentication
-
-### Machine Learning (`ML_Service/`)
-
-* Python
-* Predictive modeling pipelines
+### 🧠 Machine Learning & Data Science
+* **Language:** Python 3.10+
+* **Framework:** FastAPI
+* **Data Processing:** Pandas, NumPy
+* **Machine Learning:** Scikit-Learn (Predictive Modeling, Clustering)
 
 ---
 
-## 🏗️ Technical Architecture
+## 🤖 Machine Learning Models
+
+FinFlowy leverages advanced Machine Learning algorithms to provide proactive financial intelligence:
+1. **Spending Categorization Model:** An NLP-based classifier that automatically assigns tags to new transactions based on historical patterns.
+2. **Predictive Forecasting:** Time-series forecasting (e.g., ARIMA or Prophet) to estimate future end-of-month balances and upcoming expenses.
+3. **Behavioral Anomaly Detection:** Isolation Forests to identify unusual spending behavior and alert the user immediately.
+
+---
+
+## 🏗️ Detailed System Diagrams
 
 FinFlowy follows a **containerized microservices architecture** ensuring scalability and separation of concerns.
 
-### ⚙️ High-Level Diagram
+### 1️⃣ Context Diagram (DFD Level 0)
+
+Provides a high-level view of the entire FinFlowy system and how it interacts with external entities (Users).
 
 ```mermaid
-graph TD
-    Client([Client Browser])
-    Proxy[NGINX Reverse Proxy]
+flowchart TD
+    %% External Entities
+    User((User))
+    
+    %% Main System
+    System[<b>FinFlowy System</b><br/>Intelligent Personal Finance Tracker]
 
-    subgraph Frontend
-        React[React UI]
-    end
+    %% Data Flows
+    User -- "User Credentials (Login/Register)" --> System
+    System -- "Authentication Token & Profile Data" --> User
+    
+    User -- "Transaction Data (Income/Expense)" --> System
+    System -- "Categorized Transactions & Balances" --> User
+    
+    User -- "Financial Goals & Targets" --> System
+    System -- "Goal Progress & Notifications" --> User
+    
+    User -- "Requests Insights" --> System
+    System -- "AI-Generated Predictive Analytics" --> User
 
-    subgraph Backend
-        NodeAPI[Node.js API]
-    end
-
-    subgraph ML
-        MLService[Python ML Service]
-    end
-
-    subgraph DB
-        Mongo[(MongoDB)]
-    end
-
-    Client --> Proxy
-    Proxy --> React
-    Proxy --> NodeAPI
-    NodeAPI --> Mongo
-    NodeAPI --> MLService
+    classDef system fill:#0f172a,stroke:#3b82f6,stroke-width:3px,color:#fff,rx:10px,ry:10px;
+    classDef entity fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#fff;
+    
+    class System system;
+    class User entity;
 ```
 
 ---
 
-### 🧩 Core Components
+### 2️⃣ Data Flow Diagram (DFD Level 1)
 
-**1. Frontend (React + TypeScript)**
+Breaks down the main system into distinct sub-processes and shows the flow of data between these processes and the MongoDB data stores.
 
-* Vite-based fast builds
-* Tailwind UI
-* Charts + dashboard
+```mermaid
+flowchart LR
+    %% External Entity
+    User((User))
+    
+    %% Processes
+    P1(((1.0<br/>Authentication<br/>Management)))
+    P2(((2.0<br/>Transaction<br/>Processing)))
+    P3(((3.0<br/>Goal<br/>Tracking)))
+    P4(((4.0<br/>AI Insights &<br/>Predictive Analysis)))
+    
+    %% Data Stores
+    D1[(D1: Users DB)]
+    D2[(D2: Transactions DB)]
+    D3[(D3: Goals DB)]
+    
+    %% Flows for Authentication
+    User -- "Credentials" --> P1
+    P1 -- "Auth Token" --> User
+    P1 -- "User Data" --> D1
+    D1 -. "Verification" .-> P1
+    
+    %% Flows for Transactions
+    User -- "Input Transaction" --> P2
+    P2 -- "View Transactions" --> User
+    P2 -- "Store Record" --> D2
+    D2 -. "Fetch Records" .-> P2
+    
+    %% Flows for Goals
+    User -- "Set/Update Goal" --> P3
+    P3 -- "Goal Progress" --> User
+    P3 -- "Store Goal" --> D3
+    D3 -. "Fetch Goals" .-> P3
+    
+    %% Flows for AI Insights
+    User -- "Request Insights" --> P4
+    P4 -- "Predictive Reports" --> User
+    D2 -. "Transaction History" .-> P4
+    D3 -. "Active Goals" .-> P4
 
-**2. Backend (Node.js + Express)**
-
-* JWT authentication
-* CRUD operations
-* ML service integration
-
-**3. ML Service (Python)**
-
-* Predictive analytics
-* Behavior insights
-
-**4. Database (MongoDB)**
-
-* Stores users, transactions, goals
-
-**5. Docker Orchestration**
-
-* Multi-container system
-* NGINX routing
-
----
-
-### 📂 Directory Structure
-
-```text
-FinFlowy/
-├── Backend/
-│   ├── models/
-│   ├── routes/
-│   └── controllers/
-├── Frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── store/
-├── ML_Service/
-│   ├── app.py
-│   └── predictor.py
-├── docker-compose.yml
-└── README.md
+    classDef process fill:#3b82f6,stroke:#1e40af,stroke-width:2px,color:#fff;
+    classDef datastore fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
+    classDef entity fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#fff;
+    
+    class P1,P2,P3,P4 process;
+    class D1,D2,D3 datastore;
+    class User entity;
 ```
 
 ---
 
-## 🏗️ System Architecture (Simplified)
+### 3️⃣ Control Flow Diagram (CFD)
+
+Illustrates the logical sequence of operations and execution paths, focusing on the microservice routing between the Node.js API and the Python ML Service.
 
 ```mermaid
-graph TD;
-    Client[Frontend] --> Backend[Node API];
-    Backend --> DB[(MongoDB)];
-    Backend --> ML[ML Service];
-    ML --> Backend;
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant F as Frontend (React)
+    participant B as Backend API (Node.js)
+    participant ML as ML Service (Python)
+    participant DB as MongoDB
+
+    U->>F: Access Dashboard / Submit Action
+    
+    alt is Authentication Request
+        F->>B: POST /api/auth (Credentials)
+        B->>DB: Query User
+        DB-->>B: Return User Record
+        B-->>F: JWT Token & Profile
+    else is Standard Data Request (e.g., Add Transaction)
+        F->>B: POST /api/finance/transactions (JWT)
+        B->>B: Validate JWT & Payload
+        B->>DB: Insert Document
+        DB-->>B: Acknowledge
+        B-->>F: Success Response
+    else is ML Insight Request
+        F->>B: GET /api/finance/insights (JWT)
+        B->>DB: Fetch User History
+        DB-->>B: Return Transaction Data
+        B->>ML: POST /predict (Data Payload)
+        Note over B,ML: Microservice Communication
+        ML->>ML: Run Predictive Model
+        ML-->>B: Return AI Insights
+        B-->>F: Format & Send Insights
+    end
+    
+    F-->>U: Update UI State & Render Visuals
 ```
 
 ---
