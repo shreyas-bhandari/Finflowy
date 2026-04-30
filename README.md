@@ -93,31 +93,31 @@ FinFlowy follows a **containerized microservices architecture** ensuring scalabi
 Provides a high-level view of the entire FinFlowy system and how it interacts with external entities (Users).
 
 ```mermaid
-flowchart TD
-    %% External Entities (Rectangles)
-    User[User]
+flowchart LR
+    %% External Entity
+    USER[USER]
     
-    %% Main System Process (Circle)
-    System(("0.0<br/>FinFlowy Microservices System"))
-
-    %% Data Flows
-    User -- "User Credentials (Login/Register)" --> System
-    System -- "Authentication Token & Profile Data" --> User
+    %% Main System Process
+    SYSTEM(("FINFLOWY<br/>SYSTEM"))
     
-    User -- "Transaction Data (Income/Expense)" --> System
-    System -- "Categorized Transactions & Balances" --> User
+    %% Database
+    DB[(FINFLOWY<br/>DATABASE)]
     
-    User -- "Financial Goals & Targets" --> System
-    System -- "Goal Progress & Notifications" --> User
+    %% User Interactions
+    USER -- "Input transactions / Set goals / Request insights" --> SYSTEM
+    SYSTEM -- "Dashboard views / Predictive alerts" --> USER
     
-    User -- "Requests Insights" --> System
-    System -- "AI-Generated Predictive Analytics & Insight Alerts" --> User
+    %% System to DB
+    SYSTEM -- "Stores credentials, transactions, goals" --> DB
+    DB -- "Retrieves historical data for ML models" --> SYSTEM
 
     classDef process fill:#0f172a,stroke:#3b82f6,stroke-width:3px,color:#fff;
+    classDef datastore fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
     classDef entity fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#fff;
     
-    class System process;
-    class User entity;
+    class SYSTEM process;
+    class DB datastore;
+    class USER entity;
 ```
 
 ---
@@ -128,49 +128,53 @@ Breaks down the main system into distinct sub-processes and shows the flow of da
 
 ```mermaid
 flowchart LR
-    %% External Entity (Rectangle)
-    User[User]
+    %% External Entity
+    USER[USER]
     
-    %% Microservice Processes (Circles)
-    P1(("1.0<br/>Authentication<br/>Management<br/>(Node.js API)"))
-    P2(("2.0<br/>Transaction<br/>Processing<br/>(Node.js API)"))
-    P3(("3.0<br/>Goal<br/>Tracking<br/>(Node.js API)"))
-    P4(("4.0<br/>AI Predictive<br/>Analytics<br/>(Python ML)"))
-    P5(("5.0<br/>Anomaly & Insight<br/>Alert Engine<br/>(Python ML)"))
+    %% Processes
+    P1(("REGISTRATION /<br/>LOGIN FORM"))
+    P2(("TRANSACTION<br/>DASHBOARD"))
+    P3(("GOAL TRACKING<br/>SYSTEM"))
+    P4(("AI PREDICTIVE<br/>ANALYZER"))
+    P5(("ANOMALY ALERT<br/>ENGINE"))
     
     %% Data Stores
-    D1[(D1: Users DB)]
-    D2[(D2: Transactions DB)]
-    D3[(D3: Goals DB)]
-    D4[(D4: Alert Logs DB)]
+    D1[(users table)]
+    D2[(transactions table)]
+    D3[(goals table)]
+    D4[(alert logs table)]
     
-    %% Flows for Authentication
-    User -- "Credentials" --> P1
-    P1 -- "Auth Token" --> User
-    P1 -- "User Data" --> D1
-    D1 -. "Verification" .-> P1
+    %% User <--> Processes
+    USER -- "Login / Register" --> P1
+    P1 -- "Auth confirmation" --> USER
     
-    %% Flows for Transactions
-    User -- "Input Transaction" --> P2
-    P2 -- "View Transactions" --> User
-    P2 -- "Store Record" --> D2
-    D2 -. "Fetch Records" .-> P2
+    USER -- "Add transaction" --> P2
+    P2 -- "View balance" --> USER
     
-    %% Flows for Goals
-    User -- "Set/Update Goal" --> P3
-    P3 -- "Goal Progress" --> User
-    P3 -- "Store Goal" --> D3
-    D3 -. "Fetch Goals" .-> P3
+    USER -- "Set financial goal" --> P3
+    P3 -- "Goal status" --> USER
     
-    %% Flows for Analytics
-    User -- "Request Forecasts" --> P4
-    P4 -- "Predictive Reports" --> User
-    D2 -. "Transaction History" .-> P4
+    USER -- "Request forecast" --> P4
+    P4 -- "Predictive report" --> USER
     
-    %% Flows for Alerts
-    D2 -. "New Transactions" .-> P5
-    P5 -- "Log Insight" --> D4
-    P5 -- "Trigger Insight Alert" --> User
+    USER -- "Acknowledge alert" --> P5
+    P5 -- "Unusual spending alert" --> USER
+    
+    %% Processes <--> Data Stores
+    P1 -- "store" --> D1
+    D1 -- "retrieve" --> P1
+    
+    P2 -- "store" --> D2
+    D2 -- "retrieve" --> P2
+    
+    P3 -- "store" --> D3
+    D3 -- "retrieve" --> P3
+    
+    D2 -- "provide data" --> P4
+    D3 -- "provide goals" --> P4
+    
+    D2 -- "stream data" --> P5
+    P5 -- "store incident" --> D4
 
     classDef process fill:#3b82f6,stroke:#1e40af,stroke-width:2px,color:#fff;
     classDef datastore fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
@@ -178,7 +182,7 @@ flowchart LR
     
     class P1,P2,P3,P4,P5 process;
     class D1,D2,D3,D4 datastore;
-    class User entity;
+    class USER entity;
 ```
 
 ---
