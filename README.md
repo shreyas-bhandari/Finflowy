@@ -193,52 +193,88 @@ Illustrates the logical sequence of operations and execution paths, focusing on 
 
 ```mermaid
 flowchart TD
-    %% Premium Styling for Presentation
-    classDef central fill:#1e1b4b,stroke:#a855f7,stroke-width:4px,color:#fff,font-size:18px,font-weight:bold
-    classDef entity fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff,font-size:16px
-    classDef dbbox fill:#022c22,stroke:#10b981,stroke-width:2px,color:#fff,font-size:16px
-    classDef action fill:#334155,stroke:#475569,stroke-width:1px,color:#fff,font-size:14px
+    %% Styling
+    classDef startend fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff
+    classDef process fill:#334155,stroke:#94a3b8,stroke-width:2px,color:#fff
+    classDef decision fill:#4c1d95,stroke:#a855f7,stroke-width:2px,color:#fff
+    classDef database fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff
+    classDef error fill:#7f1d1d,stroke:#f87171,stroke-width:2px,color:#fff
     
-    %% Central Hub
-    SYS(("🤖 FINFLOWY AI<br/>SYSTEM 1.0")):::central
+    %% Start
+    START([User Opens FinFlowy]):::startend
     
-    %% External Entities (Top layer)
-    USER_IN["👤 User Interactions"]:::entity
-    USER_OUT["📱 Application UI"]:::entity
+    %% Auth Flow
+    D1{Is User<br/>Logged In?}:::decision
+    P1[Show Login / Register UI]:::process
+    P2[Submit Credentials to Node.js API]:::process
+    D2{Are Credentials<br/>Valid?}:::decision
+    E1[Display Auth Error]:::error
     
-    %% Intermediate Action Nodes (To force beautiful sprawling layout)
-    IN1[Register Account]:::action
-    IN2[Log Income/Expense]:::action
-    IN3[Set Financial Goals]:::action
-    IN4[Request ML Insights]:::action
+    %% Dashboard
+    P3[Load Interactive Dashboard]:::process
+    P4[(Fetch Data from Main DB)]:::database
     
-    OUT1[Interactive Dashboard]:::action
-    OUT2[Push Spending Alerts]:::action
-    OUT3[Goal Forecasts]:::action
+    %% User Actions
+    D3{Select User<br/>Action}:::decision
     
-    DB_A1[Store User Ledger & Goals]:::action
-    DB_A2[Fetch History for Analysis]:::action
-    DB_A3[Log Anomaly Incident]:::action
+    %% Action: Add Transaction
+    P5[Input Income / Expense]:::process
+    D4{Is Payload<br/>Valid?}:::decision
+    E2[Show Validation Error]:::error
+    P6[(Save to Main DB)]:::database
+    P7[Update UI Balance]:::process
     
-    %% Databases (Bottom layer)
-    DB_MAIN[("🗄️ Main FinFlowy Database")]:::dbbox
-    DB_ML[("🚨 ML Alert Logs Database")]:::dbbox
-
-    %% Build the Sprawling Star Flow
-    USER_IN --> IN1 & IN2 & IN3 & IN4
-    IN1 & IN2 & IN3 & IN4 --> SYS
+    %% Action: ML Insights
+    P8[Request Predictive Insights]:::process
+    P9[(Fetch Transaction History)]:::database
+    P10[Python ML Analyzes Data]:::process
+    D5{Is Anomaly<br/>Detected?}:::decision
+    P11[(Save to ML Alert Logs DB)]:::database
+    P12[Trigger Immediate UI Alert]:::process
+    P13[Generate Predictive Forecast]:::process
+    P14[Render Insights on Dashboard]:::process
     
-    SYS --> OUT1 & OUT2 & OUT3
-    OUT1 & OUT2 & OUT3 --> USER_OUT
+    %% --- Logical Flow Paths ---
     
-    SYS --> DB_A1
-    DB_A1 --> DB_MAIN
+    START --> D1
     
-    DB_MAIN --> DB_A2
-    DB_A2 --> SYS
+    %% If not logged in
+    D1 -- No --> P1
+    P1 --> P2
+    P2 --> D2
+    D2 -- No --> E1
+    E1 --> P1
     
-    SYS --> DB_A3
-    DB_A3 --> DB_ML
+    %% If logged in successfully
+    D2 -- Yes --> P3
+    D1 -- Yes --> P3
+    P3 --> P4
+    P4 --> D3
+    
+    %% If User adds transaction
+    D3 -- "Add Transaction" --> P5
+    P5 --> D4
+    D4 -- No --> E2
+    E2 --> P5
+    D4 -- Yes --> P6
+    P6 --> P7
+    P7 --> D3
+    
+    %% If User requests ML Insights
+    D3 -- "Analyze Data" --> P8
+    P8 --> P9
+    P9 --> P10
+    P10 --> D5
+    
+    %% If ML detects an issue
+    D5 -- Yes --> P11
+    P11 --> P12
+    P12 --> P13
+    
+    %% If ML detects nothing unusual
+    D5 -- No --> P13
+    P13 --> P14
+    P14 --> D3
 ```
 
 ---
