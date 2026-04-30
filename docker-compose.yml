@@ -11,6 +11,16 @@ services:
     networks:
       - ai-finance-network
 
+  ml-mongodb:
+    image: mongo:latest
+    container_name: ml-mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - ml_mongodb_data:/data/db
+    networks:
+      - ai-finance-network
+
   ml-service:
     build:
       context: ./ML_Service
@@ -18,6 +28,10 @@ services:
     container_name: ml-service
     ports:
       - "5001:5001"
+    environment:
+      - MONGO_URI=mongodb://ml-mongodb:27017/ml_finflowy
+    depends_on:
+      - ml-mongodb
     restart: on-failure
     networks:
       - ai-finance-network
@@ -61,3 +75,4 @@ networks:
 
 volumes:
   mongodb_data:
+  ml_mongodb_data:

@@ -3,8 +3,21 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import pandas as pd
 import numpy as np
+import os
+from pymongo import MongoClient
+from datetime import datetime
 
 app = FastAPI(title="FinFlowy AI Microservice", version="1.0.0")
+
+# Database-per-Service setup: Connect to ML-specific MongoDB
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27018/ml_finflowy")
+try:
+    client = MongoClient(MONGO_URI)
+    db = client.get_database()
+    alerts_collection = db["alert_logs"]
+except Exception as e:
+    print(f"Failed to connect to ML MongoDB: {e}")
+    alerts_collection = None
 
 # --- Pydantic Models ---
 
@@ -95,12 +108,20 @@ def behavior_analysis(req: BehaviorAnalysisRequest):
     alerts = []
     
     for _, row in anomalies.iterrows():
-        alerts.append({
+        alert_doc = {
             "id": f"warn_{row['id']}",
+            "userId": req.userId,
             "type": "warning", 
-            "message": f"Anomaly Detected: Your ${row['amount']:.2f} expense in {row['category']} is statistically unusual."
-        })
+            "message": f"Anomaly Detected: Your ${row['amount']:.2f} expense in {row['category']} is statistically unusual.",
+            "createdAt": datetime.utcnow().isoformat()
+        }
+        alerts.append(alert_doc)
         
+        # Save alert to the ML Service's completely separate database!
+        if alerts_collection is not None:
+            # We copy the doc so PyMongo doesn't mutate it with an ObjectId that might break Pydantic serialization
+            alerts_collection.insert_one(alert_doc.copy())
+            
     # Generate generic insights based on cashflow
     incomes = sum(t.amount for t in req.transactions if t.type == 'income')
     total_exp = sum(t.amount for t in expenses)
