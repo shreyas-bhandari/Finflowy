@@ -132,37 +132,46 @@ flowchart LR
     User[User]
     
     %% Microservice Processes (Circles)
-    P1(("1.0<br/>Frontend UI<br/>(React)"))
-    P2(("2.0<br/>Backend API<br/>(Node.js)"))
-    P3(("3.0<br/>ML Service<br/>(Python)"))
+    P1(("1.0<br/>Authentication Management<br/>(Node.js API)"))
+    P2(("2.0<br/>Transaction Processing<br/>(Node.js API)"))
+    P3(("3.0<br/>Goal Tracking<br/>(Node.js API)"))
+    P4(("4.0<br/>AI Insights & Analysis<br/>(Python ML)"))
     
     %% Data Stores
-    D1[(D1: FinFlowy Database)]
+    D1[(D1: Users DB)]
+    D2[(D2: Transactions DB)]
+    D3[(D3: Goals DB)]
     
-    %% Flows for Frontend
-    User -- "UI Interactions" --> P1
-    P1 -- "Rendered Dashboard & Alerts" --> User
+    %% Flows for Authentication
+    User -- "Credentials" --> P1
+    P1 -- "Auth Token" --> User
+    P1 -- "User Data" --> D1
+    D1 -. "Verification" .-> P1
     
-    %% Flows for Backend
-    P1 -- "REST API Calls<br/>(Auth, Transactions, Goals)" --> P2
-    P2 -- "JSON Responses" --> P1
+    %% Flows for Transactions
+    User -- "Input Transaction" --> P2
+    P2 -- "View Transactions" --> User
+    P2 -- "Store Record" --> D2
+    D2 -. "Fetch Records" .-> P2
     
-    %% Flows for ML
-    P1 -- "Request Insights" --> P2
-    P2 -- "Fetch User History" --> D1
-    D1 -. "Transaction/Goal Data" .-> P2
-    P2 -- "Forward History Payload" --> P3
-    P3 -- "Predictive Reports & Insight Alerts" --> P2
+    %% Flows for Goals
+    User -- "Set/Update Goal" --> P3
+    P3 -- "Goal Progress" --> User
+    P3 -- "Store Goal" --> D3
+    D3 -. "Fetch Goals" .-> P3
     
-    %% Database connections
-    P2 -- "Store/Update Data" --> D1
+    %% Flows for AI Insights
+    User -- "Request Insights" --> P4
+    P4 -- "Predictive Reports & Insight Alerts" --> User
+    D2 -. "Transaction History" .-> P4
+    D3 -. "Active Goals" .-> P4
 
     classDef process fill:#3b82f6,stroke:#1e40af,stroke-width:2px,color:#fff;
     classDef datastore fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
     classDef entity fill:#1e293b,stroke:#a855f7,stroke-width:2px,color:#fff;
     
-    class P1,P2,P3 process;
-    class D1 datastore;
+    class P1,P2,P3,P4 process;
+    class D1,D2,D3 datastore;
     class User entity;
 ```
 
