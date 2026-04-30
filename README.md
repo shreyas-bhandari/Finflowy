@@ -212,7 +212,7 @@ flowchart TD
     
     %% Dashboard
     P3[Load Interactive Dashboard]:::process
-    P4[(Fetch Data from Main DB)]:::database
+    P4[(Fetch from Auth Database)]:::database
     
     %% User Actions
     D3{Select User<br/>Action}:::decision
@@ -221,21 +221,22 @@ flowchart TD
     P5[Input Income / Expense]:::process
     D4{Is Payload<br/>Valid?}:::decision
     E2[Show Validation Error]:::error
-    P6[(Save to Main DB)]:::database
+    P6[(Save to Transaction Database)]:::database
     P7[Update UI Balance]:::process
     
     %% Action: Goal Tracking
     P15[Input Financial Goal]:::process
     D6{Is Goal Data<br/>Valid?}:::decision
-    P16[(Save Goal to Main DB)]:::database
+    P16[(Save to Goal Database)]:::database
+    P18[ML Model Predicts Goal Probability]:::process
     P17[Update Goal Progress UI]:::process
     
     %% Action: ML Insights
     P8[Request Predictive Insights]:::process
-    P9[(Fetch Transaction History)]:::database
-    P10[Python ML Analyzes Data]:::process
+    P9[(Fetch from Transaction Database)]:::database
+    P10[ML Model Analyzes Data]:::process
     D5{Is Anomaly<br/>Detected?}:::decision
-    P11[(Save to ML Alert Logs DB)]:::database
+    P11[(Save to ML Alert Logs Database)]:::database
     P12[Trigger Immediate UI Alert]:::process
     P13[Generate Predictive Forecast]:::process
     P14[Render Insights on Dashboard]:::process
@@ -271,7 +272,8 @@ flowchart TD
     P15 --> D6
     D6 -- No --> E2
     D6 -- Yes --> P16
-    P16 --> P17
+    P16 --> P18
+    P18 --> P17
     P17 --> D3
     
     %% If User requests ML Insights
