@@ -194,40 +194,51 @@ Illustrates the logical sequence of operations and execution paths, focusing on 
 ```mermaid
 flowchart TD
     %% Premium Styling for Presentation
-    classDef central fill:#2d1b2e,stroke:#ec4899,stroke-width:4px,color:#fff,font-size:18px,font-weight:bold
-    classDef userbox fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#fff,font-size:16px
-    classDef dbbox fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff,font-size:16px
+    classDef central fill:#1e1b4b,stroke:#a855f7,stroke-width:4px,color:#fff,font-size:18px,font-weight:bold
+    classDef entity fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff,font-size:16px
+    classDef dbbox fill:#022c22,stroke:#10b981,stroke-width:2px,color:#fff,font-size:16px
+    classDef action fill:#334155,stroke:#475569,stroke-width:1px,color:#fff,font-size:14px
     
     %% Central Hub
     SYS(("🤖 FINFLOWY AI<br/>SYSTEM 1.0")):::central
     
-    %% External Entities (Top)
-    USER["👤 Client / Public User"]:::userbox
+    %% External Entities (Top layer)
+    USER_IN["👤 User Interactions"]:::entity
+    USER_OUT["📱 Application UI"]:::entity
     
-    %% Databases (Bottom)
+    %% Intermediate Action Nodes (To force beautiful sprawling layout)
+    IN1[Register Account]:::action
+    IN2[Log Income/Expense]:::action
+    IN3[Set Financial Goals]:::action
+    IN4[Request ML Insights]:::action
+    
+    OUT1[Interactive Dashboard]:::action
+    OUT2[Push Spending Alerts]:::action
+    OUT3[Goal Forecasts]:::action
+    
+    DB_A1[Store User Ledger & Goals]:::action
+    DB_A2[Fetch History for Analysis]:::action
+    DB_A3[Log Anomaly Incident]:::action
+    
+    %% Databases (Bottom layer)
     DB_MAIN[("🗄️ Main FinFlowy Database")]:::dbbox
     DB_ML[("🚨 ML Alert Logs Database")]:::dbbox
 
-    %% Inputs from User (Flowing Down to System)
-    USER -- "Register Account / Secure Login" --> SYS
-    USER -- "Input Income & Expenses" --> SYS
-    USER -- "Set Custom Financial Goals" --> SYS
-    USER -- "Request AI Predictive Insights" --> SYS
-
-    %% Outputs from System (Flowing Up to User)
-    SYS -- "Render Glassmorphism Dashboard" --> USER
-    SYS -- "Push Real-Time Anomaly Alerts" --> USER
-    SYS -- "Show Goal Progress & Forecasts" --> USER
-
-    %% System Storage Actions (Flowing Down to DB)
-    SYS -- "Store User Credentials & Hashes" --> DB_MAIN
-    SYS -- "Store Transaction Ledger" --> DB_MAIN
-    SYS -- "Update Active Goals" --> DB_MAIN
-    SYS -- "Log Detected Spending Anomalies" --> DB_ML
-
-    %% System Retrieval Actions (Flowing Up from DB)
-    DB_MAIN -- "Fetch Transaction History for ML" --> SYS
-    DB_ML -- "Retrieve Past Alert History" --> SYS
+    %% Build the Sprawling Star Flow
+    USER_IN --> IN1 & IN2 & IN3 & IN4
+    IN1 & IN2 & IN3 & IN4 --> SYS
+    
+    SYS --> OUT1 & OUT2 & OUT3
+    OUT1 & OUT2 & OUT3 --> USER_OUT
+    
+    SYS --> DB_A1
+    DB_A1 --> DB_MAIN
+    
+    DB_MAIN --> DB_A2
+    DB_A2 --> SYS
+    
+    SYS --> DB_A3
+    DB_A3 --> DB_ML
 ```
 
 ---
