@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, ArrowLeftRight, PieChart, Target, User, LogOut, ChevronLeft, ChevronRight } from 'lucide-react'
+import { LayoutDashboard, ArrowLeftRight, PieChart, Target, User, LogOut, ChevronLeft, ChevronRight, Shield } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import { cn } from '@/lib/utils'
 
@@ -18,7 +17,7 @@ const navItems = [
 ]
 
 export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
-  const logout = useAuthStore(state => state.logout)
+  const { user, logout } = useAuthStore()
 
   return (
     <aside
@@ -56,6 +55,24 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             </span>
           </NavLink>
         ))}
+        {user?.isAdmin && (
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              cn(
+                "flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group relative",
+                isActive 
+                  ? "bg-primary/20 text-primary self-shadow" 
+                  : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+              )
+            }
+          >
+            <Shield size={22} className="min-w-[22px]" />
+            <span className={cn("font-medium transition-opacity duration-200 whitespace-nowrap", !isOpen && "md:opacity-0 md:-space-x-10")}>
+              Admin Panel
+            </span>
+          </NavLink>
+        )}
       </div>
 
       <div className="p-4 border-t border-white/10">

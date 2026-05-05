@@ -5,7 +5,10 @@ import {
   getGoals, 
   createGoal, 
   getFinancialInsights,
-  getGoalPrediction
+  getGoalPrediction,
+  getSpendingPatterns,
+  getBudgetRecommendations,
+  getExpenseForecast
 } from '../controllers/financeController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -23,6 +26,9 @@ router.route('/goals')
   .post(createGoal);
 
 router.get('/insights', getFinancialInsights);
+router.get('/insights/forecast', getExpenseForecast);
+router.get('/insights/spending-patterns', getSpendingPatterns);
+router.get('/insights/budget-recommendation', getBudgetRecommendations);
 router.get('/goals/:id/predict', getGoalPrediction);
 
 export default router;

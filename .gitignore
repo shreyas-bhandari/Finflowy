@@ -15,3 +15,7 @@ env/
 
 # Docker
 .dockerignore
+
+# Temp / scratch files
+temp_git_log.txt
+*.log

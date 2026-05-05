@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, X, Search, Filter, TrendingUp, TrendingDown, Trash2 } from 'lucide-react'
 import { useFinanceStore, type Transaction } from '@/store/useFinanceStore'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
@@ -15,7 +15,13 @@ export default function Transactions() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<Omit<Transaction, 'id'>>()
+  const today = new Date().toISOString().split('T')[0]
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<Omit<Transaction, 'id'>>({
+    defaultValues: {
+      date: today,
+      type: 'expense'
+    }
+  })
 
   const onSubmit = (data: Omit<Transaction, 'id'>) => {
     // Convert amount string back to number
@@ -201,6 +207,7 @@ export default function Transactions() {
                     <Label>Date</Label>
                     <Input 
                       type="date"
+                      max={today}
                       {...register('date', { required: 'Date is required' })} 
                     />
                     {errors.date && <p className="text-xs text-destructive">{errors.date.message as string}</p>}

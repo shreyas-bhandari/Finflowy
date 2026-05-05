@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+import { authDB } from '../config/db.js';
 
+// DB 1: auth_finflowy — Users collection
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -14,6 +16,11 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   avatar: {
     type: String,
@@ -34,5 +41,6 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+// Register model on the AUTH DB connection
+const User = authDB.model('User', userSchema);
 export default User;

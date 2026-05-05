@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useFinanceStore, type Goal } from '@/store/useFinanceStore'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { useFinanceStore } from '@/store/useFinanceStore'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Target, TrendingUp, AlertTriangle, ChevronRight, Plus, X, ListOrdered, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
@@ -113,7 +113,7 @@ export default function Goals() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Progress</span>
-                    <span className="font-bold">${goal.currentAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })} / ${goal.targetAmount.toLocaleString()}</span>
+                    <span className="font-bold">₹{goal.currentAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })} / ₹{goal.targetAmount.toLocaleString()}</span>
                   </div>
                   
                   {/* Progress Bar Container */}
@@ -129,7 +129,7 @@ export default function Goals() {
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground mt-2">
                     <span>{progressPercentage.toFixed(1)}% Achieved</span>
-                    <span>${Math.max(goal.targetAmount - goal.currentAmount, 0).toLocaleString(undefined, { maximumFractionDigits: 0 })} Remaining</span>
+                    <span>₹{Math.max(goal.targetAmount - goal.currentAmount, 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })} Remaining</span>
                   </div>
                 </div>
 
@@ -195,7 +195,7 @@ export default function Goals() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label>Target Amount ($)</Label>
+                  <Label>Target Amount (₹)</Label>
                   <Input 
                     type="number" 
                     placeholder="5000" 

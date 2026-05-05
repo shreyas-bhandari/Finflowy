@@ -8,6 +8,22 @@ import Transactions from './pages/Transactions'
 import Insights from './pages/Insights'
 import Goals from './pages/Goals'
 import Profile from './pages/Profile'
+import Admin from './pages/Admin'
+import { useAuthStore } from './store/useAuthStore'
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  return <>{children}</>
+}
+
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const user = useAuthStore(state => state.user)
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (!user?.isAdmin) return <Navigate to="/" replace />
+  return <>{children}</>
+}
 
 function App() {
   return (
@@ -15,12 +31,17 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      }>
         <Route index element={<Dashboard />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="insights" element={<Insights />} />
         <Route path="goals" element={<Goals />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="admin" element={<AdminRoute><Admin /></AdminRoute>} />
       </Route>
       
       <Route path="*" element={<Navigate to="/" replace />} />

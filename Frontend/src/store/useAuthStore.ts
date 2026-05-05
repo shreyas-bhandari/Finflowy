@@ -6,6 +6,7 @@ interface User {
   name: string
   email: string
   avatar?: string
+  isAdmin?: boolean
 }
 
 interface AuthState {
@@ -17,18 +18,28 @@ interface AuthState {
   updateUser: (data: Partial<User>) => void
 }
 
+const storedToken = localStorage.getItem('token')
+const storedUser = localStorage.getItem('user')
+
 export const useAuthStore = create<AuthState>((set) => ({
-  user: {
-    id: "user-1",
-    name: "Alex Designer",
-    email: "alex@example.com",
-  }, 
-  token: "mock-jwt-token",
-  isAuthenticated: true,
-  login: (token, user) => set({ token, user, isAuthenticated: true }),
+  user: storedUser ? JSON.parse(storedUser) : null,
+  token: storedToken ? storedToken : null,
+  isAuthenticated: !!storedToken,
+  login: (token, user) => {
+    localStorage.setItem('token', token)
+    localStorage.setItem('user', JSON.stringify(user))
+    set({ token, user, isAuthenticated: true })
+  },
   logout: () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
     useFinanceStore.getState().clearData()
     set({ token: null, user: null, isAuthenticated: false })
   },
-  updateUser: (data) => set((state) => ({ user: state.user ? { ...state.user, ...data } : null }))
+  updateUser: (data) => set((state) => {
+    if (!state.user) return { user: null }
+    const updatedUser = { ...state.user, ...data }
+    localStorage.setItem('user', JSON.stringify(updatedUser))
+    return { user: updatedUser }
+  })
 }))

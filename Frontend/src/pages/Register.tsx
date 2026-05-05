@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Label } from '@/components/ui/Label'
 import toast from 'react-hot-toast'
+import axios from 'axios'
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false)
@@ -16,11 +17,19 @@ export default function Register() {
 
   const onSubmit = async (data: any) => {
     setIsLoading(true)
-    setTimeout(() => {
+    try {
+      await axios.post('/api/auth/register', {
+        name: data.name,
+        email: data.email,
+        password: data.password
+      })
       toast.success('Account created successfully!')
-      setIsLoading(false)
       navigate('/login')
-    }, 1000)
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Registration failed')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
