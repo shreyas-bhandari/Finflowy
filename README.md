@@ -652,7 +652,7 @@ This is a final year academic project. For suggestions or improvements, feel fre
 
 <div align="center">
 
-**Built with ❤️ as a Final Year Engineering Project**
+**Built with ❤️**
 
 *FinFlowy — Where Machine Learning meets Personal Finance*
 
