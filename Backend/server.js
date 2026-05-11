@@ -1,14 +1,12 @@
+import 'dotenv/config';   // ← MUST be first: loads .env before any other imports
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 
-// Import DB connections first — this establishes all 3 connections on startup
+// Import DB connections AFTER dotenv so env vars are available in db.js
 import './config/db.js';
 
 import authRoutes from './routes/authRoutes.js';
 import financeRoutes from './routes/financeRoutes.js';
-
-dotenv.config();
 
 const app = express();
 app.use(cors());
