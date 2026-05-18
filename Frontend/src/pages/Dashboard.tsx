@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, 
-  ResponsiveContainer, BarChart, Bar, Cell, Legend
+  ResponsiveContainer, PieChart, Pie, Cell, Legend
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card'
 import { useFinanceStore } from '@/store/useFinanceStore'
@@ -40,20 +40,6 @@ const CashFlowTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
-// Custom tooltip for bar chart
-const CategoryTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div style={{ background: 'rgba(10,10,25,0.92)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, padding: '10px 16px', boxShadow: '0 8px 30px rgba(0,0,0,0.4)' }}>
-        <p style={{ color: '#ddd', fontSize: 13, fontWeight: 700 }}>{payload[0]?.payload?.name}</p>
-        <p style={{ color: '#8b5cf6', fontSize: 13, marginTop: 4 }}>
-          Spent: {formatINR(payload[0]?.value)}
-        </p>
-      </div>
-    )
-  }
-  return null
-}
 
 export default function Dashboard() {
   const transactions = useFinanceStore(state => state.transactions)
@@ -228,48 +214,47 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Bar Chart — Spending by Category */}
+        {/* Donut Chart — Spending by Category */}
         <Card className="lg:col-span-2 flex flex-col">
           <CardHeader>
             <CardTitle>Spending by Category</CardTitle>
-            <CardDescription>Top expense categories</CardDescription>
+            <CardDescription>Visual breakdown of your expenses</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 min-h-[300px] pt-0">
+          <CardContent className="flex-1 flex flex-col items-center justify-center min-h-[300px] pt-0">
             {pieData.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart 
-                  data={pieData} 
-                  layout="vertical"
-                  margin={{ top: 0, right: 10, left: 0, bottom: 0 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" horizontal={false} />
-                  <XAxis 
-                    type="number"
-                    stroke="#666"
-                    fontSize={11}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={formatINRShort}
-                    tick={{ fill: '#888' }}
-                  />
-                  <YAxis 
-                    type="category"
-                    dataKey="name"
-                    stroke="#666"
-                    fontSize={11}
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fill: '#ccc' }}
-                    width={72}
-                  />
-                  <RechartsTooltip content={<CategoryTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-                  <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={24}>
-                    {pieData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              <>
+                <ResponsiveContainer width="100%" height={240}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={4}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {pieData.map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <RechartsTooltip
+                      formatter={(value: any) => [formatINR(Number(value)), 'Spent']}
+                      contentStyle={{ background: 'rgba(10,10,20,0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-2 w-full px-4">
+                  {pieData.map((entry, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                      <span className="text-xs font-medium text-muted-foreground truncate">{entry.name}</span>
+                      <span className="text-xs text-muted-foreground ml-auto shrink-0">{formatINR(entry.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="h-[300px] flex flex-col items-center justify-center gap-3 text-muted-foreground">
                 <Sparkles className="opacity-30" size={36} />
