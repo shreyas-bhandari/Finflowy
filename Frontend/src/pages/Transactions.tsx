@@ -38,7 +38,8 @@ export default function Transactions() {
 
   // Filter transactions
   const filteredTransactions = transactions.filter(t => {
-    const matchesSearch = t.description.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const desc = (t.description || '').toLowerCase()
+    const matchesSearch = desc.includes(searchTerm.toLowerCase()) || 
                           t.category.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = filterType === 'all' || t.type === filterType
     return matchesSearch && matchesType
@@ -110,7 +111,7 @@ export default function Transactions() {
                     <div className={`p-2 rounded-full ${tx.type === 'income' ? 'bg-success/20 text-success' : 'bg-muted text-muted-foreground'}`}>
                       {tx.type === 'income' ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                     </div>
-                    {tx.description}
+                    {tx.description || <span className="text-muted-foreground italic text-xs">No description</span>}
                   </td>
                   <td className="px-6 py-4">
                     <span className="px-3 py-1 rounded-full bg-white/10 text-xs text-muted-foreground">
@@ -194,12 +195,11 @@ export default function Transactions() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Description</Label>
+                  <Label>Description <span className="text-muted-foreground text-xs font-normal">(optional)</span></Label>
                   <Input 
                     placeholder="E.g. Groceries at Walmart" 
-                    {...register('description', { required: 'Description is required' })} 
+                    {...register('description')} 
                   />
-                  {errors.description && <p className="text-xs text-destructive">{errors.description.message as string}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">

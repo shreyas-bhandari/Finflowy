@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, Legend
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, 
+  ResponsiveContainer, BarChart, Bar, Cell, Legend
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/Card'
 import { useFinanceStore } from '@/store/useFinanceStore'
@@ -12,17 +12,43 @@ const COLORS = ['#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e', '#f97316'
 const formatINR = (value: number) =>
   `₹${value.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
 
-// Custom tooltip for charts
-const CustomTooltip = ({ active, payload, label }: any) => {
+const formatINRShort = (value: number) => {
+  if (value >= 100000) return `₹${(value / 100000).toFixed(1)}L`
+  if (value >= 1000) return `₹${(value / 1000).toFixed(0)}k`
+  return `₹${value}`
+}
+
+// Custom tooltip for area / line chart
+const CashFlowTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="glass p-3 rounded-xl border border-white/10 text-sm shadow-2xl">
-        <p className="font-semibold text-foreground mb-1">{label}</p>
+      <div style={{ background: 'rgba(10,10,25,0.92)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, padding: '10px 16px', boxShadow: '0 8px 30px rgba(0,0,0,0.4)' }}>
+        <p style={{ color: '#aaa', fontSize: 11, marginBottom: 6, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
         {payload.map((entry: any, i: number) => (
-          <p key={i} style={{ color: entry.color }}>
-            {entry.name.charAt(0).toUpperCase() + entry.name.slice(1)}: {formatINR(entry.value)}
+          <p key={i} style={{ color: entry.color, fontSize: 13, margin: '3px 0', fontWeight: 600 }}>
+            {entry.name === 'income' ? '↑ Income' : '↓ Expense'}: {formatINR(entry.value)}
           </p>
         ))}
+        {payload.length === 2 && (
+          <p style={{ color: '#888', fontSize: 11, marginTop: 6, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 6 }}>
+            Net: {formatINR(payload[0].value - payload[1].value)}
+          </p>
+        )}
+      </div>
+    )
+  }
+  return null
+}
+
+// Custom tooltip for bar chart
+const CategoryTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ background: 'rgba(10,10,25,0.92)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, padding: '10px 16px', boxShadow: '0 8px 30px rgba(0,0,0,0.4)' }}>
+        <p style={{ color: '#ddd', fontSize: 13, fontWeight: 700 }}>{payload[0]?.payload?.name}</p>
+        <p style={{ color: '#8b5cf6', fontSize: 13, marginTop: 4 }}>
+          Spent: {formatINR(payload[0]?.value)}
+        </p>
       </div>
     )
   }
@@ -58,10 +84,10 @@ export default function Dashboard() {
       else monthMap[monthStr].expense += t.amount
     })
 
-    const computedPieData = Object.keys(catMap).map(key => ({
-      name: key,
-      value: catMap[key]
-    }))
+    const computedPieData = Object.keys(catMap)
+      .map(key => ({ name: key, value: catMap[key] }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 8)
 
     const computedLineData = Object.keys(monthMap).sort().map(key => monthMap[key])
     const computedSavings = inc > 0 ? ((inc - exp) / inc) * 100 : 0
@@ -107,6 +133,8 @@ export default function Dashboard() {
     }
   ]
 
+  const noData = transactions.length === 0
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -139,71 +167,112 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-6 grid-cols-1 lg:grid-cols-7">
-        {/* Main Line Chart */}
-        <Card className="lg:col-span-4 flex flex-col">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-5">
+        {/* Area Chart — Cash Flow */}
+        <Card className="lg:col-span-3 flex flex-col">
           <CardHeader>
             <CardTitle>Cash Flow Overview</CardTitle>
-            <CardDescription>Income vs Expenses over time (in ₹)</CardDescription>
+            <CardDescription>Monthly income vs expenses trend</CardDescription>
           </CardHeader>
-          <CardContent className="pl-0 flex-1 min-h-[300px]">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={lineData.length ? lineData : [{ name: 'No data', income: 0, expense: 0 }]} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.07)" vertical={false} />
-                <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} />
-                <RechartsTooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="income" stroke="#8b5cf6" strokeWidth={3} dot={false} activeDot={{ r: 8, fill: '#8b5cf6' }} />
-                <Line type="monotone" dataKey="expense" stroke="#ec4899" strokeWidth={3} dot={false} activeDot={{ r: 8, fill: '#ec4899' }} />
-                <Legend formatter={(val) => <span style={{ color: '#aaa', fontSize: 12, textTransform: 'capitalize' }}>{val}</span>} />
-              </LineChart>
-            </ResponsiveContainer>
+          <CardContent className="flex-1 min-h-[300px] pt-0">
+            {noData ? (
+              <div className="h-[300px] flex flex-col items-center justify-center gap-3 text-muted-foreground">
+                <Sparkles className="opacity-30" size={36} />
+                <p className="text-sm">Add transactions to see your cash flow chart</p>
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={lineData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="incomeGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ec4899" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#ec4899" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke="#666" 
+                    fontSize={12} 
+                    tickLine={false} 
+                    axisLine={false}
+                    tick={{ fill: '#888' }}
+                  />
+                  <YAxis 
+                    stroke="#666" 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={false}
+                    tickFormatter={formatINRShort}
+                    tick={{ fill: '#888' }}
+                    width={55}
+                  />
+                  <RechartsTooltip content={<CashFlowTooltip />} />
+                  <Legend 
+                    wrapperStyle={{ paddingTop: 12 }}
+                    formatter={(val) => (
+                      <span style={{ color: val === 'income' ? '#8b5cf6' : '#ec4899', fontSize: 12, fontWeight: 600, textTransform: 'capitalize' }}>
+                        {val === 'income' ? '▲ Income' : '▼ Expense'}
+                      </span>
+                    )}
+                  />
+                  <Area type="monotone" dataKey="income" stroke="#8b5cf6" strokeWidth={2.5} fill="url(#incomeGrad)" dot={false} activeDot={{ r: 6, fill: '#8b5cf6', stroke: '#fff', strokeWidth: 2 }} />
+                  <Area type="monotone" dataKey="expense" stroke="#ec4899" strokeWidth={2.5} fill="url(#expenseGrad)" dot={false} activeDot={{ r: 6, fill: '#ec4899', stroke: '#fff', strokeWidth: 2 }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </CardContent>
         </Card>
 
-        {/* Pie Chart */}
-        <Card className="lg:col-span-3 flex flex-col">
+        {/* Bar Chart — Spending by Category */}
+        <Card className="lg:col-span-2 flex flex-col">
           <CardHeader>
             <CardTitle>Spending by Category</CardTitle>
-            <CardDescription>Visual breakdown of your expenses</CardDescription>
+            <CardDescription>Top expense categories</CardDescription>
           </CardHeader>
-          <CardContent className="flex-1 flex flex-col items-center justify-center min-h-[300px]">
+          <CardContent className="flex-1 min-h-[300px] pt-0">
             {pieData.length > 0 ? (
-              <>
-                <ResponsiveContainer width="100%" height={240}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={55}
-                      outerRadius={95}
-                      paddingAngle={4}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {pieData.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <RechartsTooltip
-                      formatter={(value: any) => [formatINR(Number(value)), 'Spent']}
-                      contentStyle={{ background: 'rgba(10,10,20,0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="grid grid-cols-2 gap-2 mt-2 w-full px-2">
-                  {pieData.map((entry, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                      <span className="text-xs font-medium text-muted-foreground truncate">{entry.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart 
+                  data={pieData} 
+                  layout="vertical"
+                  margin={{ top: 0, right: 10, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" horizontal={false} />
+                  <XAxis 
+                    type="number"
+                    stroke="#666"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={formatINRShort}
+                    tick={{ fill: '#888' }}
+                  />
+                  <YAxis 
+                    type="category"
+                    dataKey="name"
+                    stroke="#666"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fill: '#ccc' }}
+                    width={72}
+                  />
+                  <RechartsTooltip content={<CategoryTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                  <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={24}>
+                    {pieData.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             ) : (
-              <div className="text-muted-foreground flex flex-col items-center gap-2">
-                <Sparkles className="opacity-40" size={36} />
+              <div className="h-[300px] flex flex-col items-center justify-center gap-3 text-muted-foreground">
+                <Sparkles className="opacity-30" size={36} />
                 <p className="text-sm">No expense data yet</p>
               </div>
             )}
@@ -226,7 +295,7 @@ export default function Dashboard() {
                     {tx.type === 'income' ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">{tx.description}</p>
+                    <p className="font-semibold text-sm">{tx.description || tx.category}</p>
                     <p className="text-xs text-muted-foreground">{tx.category} • {tx.date}</p>
                   </div>
                 </div>
